@@ -1,0 +1,28 @@
+name: Deploy node Application
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source code
+        uses: actions/checkout@v4
+      - name: Login to dockerhub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build docker image
+        run: docker build -t arunkarthik1403/node_ci_cd .
+      - name: Publish Image to docker hub
+        run: docker push arunkarthik1403/node_ci_cd:latest
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: pull image from docker hub
+        run: docker pull arunkarthik1403/node_ci_cd:latest
+      - name: Run Docker Container
+        run: docker run -d -p 4000:4000 --name nodejs-app-container -e MONGO_PASSWORD=`${{secrets.MONGO_PASSWORD}}` arunkarthik1403/node_ci_cd
