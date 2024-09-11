@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
 
 app.get("/", (req, res) => {
-  res.send("hello world!");
+  res.send("vanakam da mapla trichy la irunthu");
 });
 
 const port = 4000;
