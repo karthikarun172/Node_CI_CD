@@ -24,6 +24,7 @@ jobs:
     steps:
       - name: pull image from docker hub
         run: docker pull arunkarthik1403/node_ci_cd:latest
-      - name: docker rm -f nodejs-app-container
+      - name: Delete old contaier
+        run: docker rm -f nodejs-app-container
       - name: Run Docker Container
         run: docker run -d -p 4000:4000 --name nodejs-app-container -e MONGO_PASSWORD=`${{secrets.MONGO_PASSWORD}}` arunkarthik1403/node_ci_cd
